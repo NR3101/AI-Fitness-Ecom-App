@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: jdbc:postgresql://ep-long-night-ady7y06x-pooler.c-2.us-east-1.aws.neon.tech/fitness-user?sslmode=require&channel_binding=require
+    username: neondb_owner
+    password: npg_lT3xsvOknh9H
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  jackson: # this is used to not include null values in JSON responses
+    default-property-inclusion: non_null
