@@ -14,3 +14,13 @@ spring:
         format_sql: true
   jackson: # this is used to not include null values in JSON responses
     default-property-inclusion: non_null
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+#    register-with-eureka: true
+#    fetch-registry: true
+
+server:
+  port: 8081

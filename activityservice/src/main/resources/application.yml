@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: activity-service
+  data:
+    mongodb:
+      uri: mongodb+srv://root:qu0M7TNa9tflMAwM@cluster0.qkkvbxu.mongodb.net/fitness-activity?retryWrites=true&w=majority&appName=Cluster0
+      database: fitness-activity
+  jackson: # this is used to not include null values in JSON responses
+    default-property-inclusion: non_null
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+#    register-with-eureka: true
+#    fetch-registry: true
+
+server:
+  port: 8082
