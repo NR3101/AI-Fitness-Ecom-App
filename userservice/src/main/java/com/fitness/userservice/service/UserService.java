@@ -44,4 +44,8 @@ public class UserService {
                 .map(user -> new UserResponse(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getCreatedAt(), user.getUpdatedAt()))
                 .toList();
     }
+
+    public Boolean existsByUserId(String id) {
+        return userRepository.existsById(id);
+    }
 }

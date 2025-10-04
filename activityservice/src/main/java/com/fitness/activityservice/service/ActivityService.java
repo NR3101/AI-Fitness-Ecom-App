@@ -2,6 +2,7 @@ package com.fitness.activityservice.service;
 
 import com.fitness.activityservice.dto.ActivityRequest;
 import com.fitness.activityservice.dto.ActivityResponse;
+import com.fitness.activityservice.exception.ResourceNotFoundException;
 import com.fitness.activityservice.model.Activity;
 import com.fitness.activityservice.repository.ActivityRepository;
 import lombok.AllArgsConstructor;
@@ -11,8 +12,13 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class ActivityService {
     private final ActivityRepository activityRepository;
+    private final UserValidationService userValidationService;
 
     public ActivityResponse trackActivity(ActivityRequest request) {
+        if (!userValidationService.isUserValid(request.getUserId())) {
+            throw new ResourceNotFoundException("Invalid user ID: " + request.getUserId());
+        }
+
         Activity activity = Activity.builder()
                 .userId(request.getUserId())
                 .type(request.getType())

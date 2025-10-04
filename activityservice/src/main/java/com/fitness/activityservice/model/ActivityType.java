@@ -11,5 +11,5 @@ public enum ActivityType {
     HIIT,
     DANCE,
     PILATES,
-    OTHER
+    OTHERS
 }

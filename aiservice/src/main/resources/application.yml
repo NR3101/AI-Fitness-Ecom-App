@@ -1,10 +1,10 @@
 spring:
   application:
-    name: activity-service
+    name: ai-service
   data:
     mongodb:
-      uri: mongodb+srv://root:qu0M7TNa9tflMAwM@cluster0.qkkvbxu.mongodb.net/fitness-activity?retryWrites=true&w=majority&appName=Cluster0
-      database: fitness-activity
+      uri: mongodb+srv://root:qu0M7TNa9tflMAwM@cluster0.qkkvbxu.mongodb.net/ai-recommendation-fitness?retryWrites=true&w=majority&appName=Cluster0
+      database: ai-recommendation-fitness
   jackson: # this is used to not include null values in JSON responses
     default-property-inclusion: non_null
 
@@ -12,7 +12,5 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
-
-
 server:
-  port: 8082
+  port: 8083

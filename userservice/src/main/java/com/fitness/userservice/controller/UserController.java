@@ -30,6 +30,11 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success(userResponse, "User fetched successfully"));
     }
 
+    @GetMapping("/{id}/validate")
+    public ResponseEntity<Boolean> validateUser(@PathVariable String id) {
+        return ResponseEntity.ok(userService.existsByUserId(id));
+    }
+
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserResponse>> register(@Valid @RequestBody RegisterRequest request) {
