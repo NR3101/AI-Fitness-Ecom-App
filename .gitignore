@@ -1,0 +1,66 @@
+# IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+
+# Build outputs
+target/
+build/
+out/
+bin/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Maven
+.mvn/
+mvn.cmd
+mvnw
+mvnw.cmd
+dependency-reduced-pom.xml
+
+# Gradle (if used)
+.gradle/
+gradle/
+gradlew
+gradlew.bat
+
+# Logs
+*.log
+logs/
+spring.log
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+*.tmp
+*~
+
+# Package files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# JVM crash logs
+hs_err_pid*
+replay_pid*
+
+# Environment variables
+.env
+.env.local
+
+# Test reports
+junit/
+test-output/
+coverage/
+*.coverage
