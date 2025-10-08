@@ -1,7 +1,8 @@
 package com.fitness.userservice.controller;
 
 import com.fitness.userservice.dto.ApiResponse;
-import com.fitness.userservice.dto.RegisterRequest;
+import com.fitness.userservice.dto.SyncUserRequest;
+import com.fitness.userservice.dto.SignupRequest;
 import com.fitness.userservice.dto.UserResponse;
 import com.fitness.userservice.service.UserService;
 import jakarta.validation.Valid;
@@ -35,12 +36,24 @@ public class UserController {
         return ResponseEntity.ok(userService.existsByUserId(id));
     }
 
+    @GetMapping("/keycloak/{keycloakId}")
+    public ResponseEntity<ApiResponse<UserResponse>> getUserByKeycloakId(@PathVariable String keycloakId) {
+        UserResponse userResponse = userService.getUserByKeycloakId(keycloakId);
+        return ResponseEntity.ok(ApiResponse.success(userResponse, "User fetched successfully"));
+    }
 
-    @PostMapping("/register")
-    public ResponseEntity<ApiResponse<UserResponse>> register(@Valid @RequestBody RegisterRequest request) {
-        UserResponse userResponse = userService.register(request);
+    @PostMapping("/sync")
+    public ResponseEntity<ApiResponse<UserResponse>> syncUser(@Valid @RequestBody SyncUserRequest request) {
+        UserResponse userResponse = userService.syncUser(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(userResponse, "User registered successfully"));
+                .body(ApiResponse.success(userResponse, "User synced successfully"));
+    }
+    
+    @PostMapping("/signup")
+    public ResponseEntity<ApiResponse<UserResponse>> signup(@Valid @RequestBody SignupRequest request) {
+        UserResponse userResponse = userService.signup(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(userResponse, "User created successfully. Please login with your credentials."));
     }
 
 }

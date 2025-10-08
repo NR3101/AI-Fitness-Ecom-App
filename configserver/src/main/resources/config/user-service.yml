@@ -13,6 +13,13 @@ spring:
   jackson: # this is used to not include null values in JSON responses
     default-property-inclusion: non_null
 
+keycloak:
+  auth-server-url: http://localhost:8181
+  realm: fitness-app
+  admin:
+    username: admin
+    password: admin
+
 eureka:
   client:
     service-url:

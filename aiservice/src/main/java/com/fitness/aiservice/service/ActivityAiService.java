@@ -58,6 +58,13 @@ public class ActivityAiService {
             List<String> suggestions = extractSuggestions(analysisJson.path("suggestions"));
             List<String> safety = extractSafety(analysisJson.path("safety"));
 
+            // Extract custom activity name if present
+            String activityName = null;
+            if (activity.getAdditionalMetrics() != null && 
+                activity.getAdditionalMetrics().containsKey("customActivityName")) {
+                activityName = (String) activity.getAdditionalMetrics().get("customActivityName");
+            }
+
             return Recommendation
                     .builder()
                     .activityId(activity.getId())
@@ -67,6 +74,11 @@ public class ActivityAiService {
                     .improvements(improvements)
                     .suggestions(suggestions)
                     .safetyTips(safety)
+                    .activityType(activity.getType().toString())
+                    .activityName(activityName)
+                    .activityDuration(activity.getDuration())
+                    .activityCalories(activity.getCaloriesBurned())
+                    .activityMetrics(activity.getAdditionalMetrics())
                     .createdAt(LocalDateTime.now())
                     .build();
 
@@ -77,6 +89,13 @@ public class ActivityAiService {
     }
 
     private Recommendation createDefaultRecommendation(Activity activity) {
+        // Extract custom activity name if present
+        String activityName = null;
+        if (activity.getAdditionalMetrics() != null && 
+            activity.getAdditionalMetrics().containsKey("customActivityName")) {
+            activityName = (String) activity.getAdditionalMetrics().get("customActivityName");
+        }
+
         return Recommendation
                 .builder()
                 .activityId(activity.getId())
@@ -86,6 +105,11 @@ public class ActivityAiService {
                 .improvements(Collections.singletonList("No specific improvements provided."))
                 .suggestions(Collections.singletonList("No specific workout provided."))
                 .safetyTips(Collections.singletonList("No specific safety recommendations provided."))
+                .activityType(activity.getType().toString())
+                .activityName(activityName)
+                .activityDuration(activity.getDuration())
+                .activityCalories(activity.getCaloriesBurned())
+                .activityMetrics(activity.getAdditionalMetrics())
                 .createdAt(LocalDateTime.now())
                 .build();
     }

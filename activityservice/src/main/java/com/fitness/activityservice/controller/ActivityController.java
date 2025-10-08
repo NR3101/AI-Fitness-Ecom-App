@@ -8,10 +8,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/activities")
@@ -24,5 +23,23 @@ public class ActivityController {
         ActivityResponse response = activityService.trackActivity(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(response, "Activity tracked successfully"));
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<ApiResponse<List<ActivityResponse>>> getUserActivities(@PathVariable String userId) {
+        List<ActivityResponse> activities = activityService.getUserActivities(userId);
+        return ResponseEntity.ok(ApiResponse.success(activities, "Activities retrieved successfully"));
+    }
+
+    @GetMapping("/{activityId}")
+    public ResponseEntity<ApiResponse<ActivityResponse>> getActivityById(@PathVariable String activityId) {
+        ActivityResponse activity = activityService.getActivityById(activityId);
+        return ResponseEntity.ok(ApiResponse.success(activity, "Activity retrieved successfully"));
+    }
+
+    @DeleteMapping("/{activityId}")
+    public ResponseEntity<ApiResponse<Void>> deleteActivity(@PathVariable String activityId) {
+        activityService.deleteActivity(activityId);
+        return ResponseEntity.ok(ApiResponse.success(null, "Activity deleted successfully"));
     }
 }

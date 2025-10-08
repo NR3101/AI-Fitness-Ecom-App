@@ -21,4 +21,14 @@ public class RecommendationService {
         return recommendationRepository.findByActivityId(activityId).
                 orElseThrow(() -> new ResourceNotFoundException("Recommendation not found for activityId: " + activityId));
     }
+
+    public Recommendation getRecommendationById(String recommendationId) {
+        return recommendationRepository.findById(recommendationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Recommendation not found with id: " + recommendationId));
+    }
+
+    public void deleteRecommendationByActivityId(String activityId) {
+        recommendationRepository.findByActivityId(activityId)
+                .ifPresent(recommendationRepository::delete);
+    }
 }

@@ -1,6 +1,6 @@
 package com.fitness.gateway;
 
-import com.fitness.gateway.user.RegisterRequest;
+import com.fitness.gateway.user.SyncUserRequest;
 import com.fitness.gateway.user.UserService;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
@@ -24,20 +24,28 @@ public class KeycloakUserSyncFilter implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        String userId = exchange.getRequest().getHeaders().getFirst("X-User-ID");
+        String path = exchange.getRequest().getPath().value();
         String token = exchange.getRequest().getHeaders().getFirst("Authorization");
-        RegisterRequest registerRequest = getUserDetails(token);
-        if (userId == null) {
-            userId = registerRequest.getKeycloakId();
+        
+        // Skip filter for public endpoints (signup)
+        if (isPublicEndpoint(path) || token == null) {
+            return chain.filter(exchange);
+        }
+        
+        String userId = exchange.getRequest().getHeaders().getFirst("X-User-ID");
+        SyncUserRequest syncUserRequest = getUserDetails(token);
+        
+        if (userId == null && syncUserRequest != null) {
+            userId = syncUserRequest.getKeycloakId();
         }
 
-        if (userId != null && token != null) {
+        if (userId != null) {
             String finalUserId = userId;
             return userService.validateUser(userId)
                     .flatMap(exist -> {
                         if (!exist) {
-                            if (registerRequest != null) {
-                                return userService.registerUser(registerRequest)
+                            if (syncUserRequest != null) {
+                                return userService.syncUser(syncUserRequest)
                                         .then(Mono.empty());
                             } else {
                                 return Mono.empty();
@@ -57,14 +65,19 @@ public class KeycloakUserSyncFilter implements WebFilter {
 
         return chain.filter(exchange);
     }
+    
+    private boolean isPublicEndpoint(String path) {
+        return path.equals("/api/v1/users/signup") || 
+               path.startsWith("/actuator/");
+    }
 
-    private RegisterRequest getUserDetails(String token) {
+    private SyncUserRequest getUserDetails(String token) {
         try {
             String tokenWithoutBearer = token.replace("Bearer", "").trim();
             SignedJWT signedJWT = SignedJWT.parse(tokenWithoutBearer);
             JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
 
-            return RegisterRequest.builder()
+            return SyncUserRequest.builder()
                     .email(claims.getStringClaim("email"))
                     .keycloakId(claims.getSubject())
                     .firstName(claims.getStringClaim("given_name"))

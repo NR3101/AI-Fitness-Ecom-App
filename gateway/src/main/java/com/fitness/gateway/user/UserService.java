@@ -31,11 +31,11 @@ public class UserService {
                 });
     }
 
-    public Mono<UserResponse> registerUser(RegisterRequest registerRequest) {
-        log.info("Calling User Registration for {}", registerRequest.getEmail());
+    public Mono<UserResponse> syncUser(SyncUserRequest syncUserRequest) {
+        log.info("Calling User Sync for {}", syncUserRequest.getEmail());
         return userServiceWebClient.post()
-                .uri("/api/v1/users/register")
-                .bodyValue(registerRequest)
+                .uri("/api/v1/users/sync")
+                .bodyValue(syncUserRequest)
                 .retrieve()
                 .bodyToMono(UserResponse.class)
                 .onErrorResume(WebClientResponseException.class, e -> {
